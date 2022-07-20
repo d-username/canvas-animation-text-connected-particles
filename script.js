@@ -3,6 +3,8 @@ const context = canvas.getContext('2d');
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 let particleArray = [];
+let adjustX = 10;
+let adjustY = 10;
 
 // NOTES: i declared the global variables needed
 
@@ -22,9 +24,9 @@ window.addEventListener('mousemove', function (event) {
 // NOTES: mouse move eventlistener will always update the mouse coordinates
 
 context.fillStyle = 'blue';
-context.font = '100px San-Serif';
-context.fillText('David', 50, 200);
-const data = context.getImageData(0, 0, 100, 100);
+context.font = '30px Tahoma';
+context.fillText('David', 0, 25);
+const textCoordinates = context.getImageData(0, 0, 100, 100);
 
 // NOTES: this is the the text I want to render.
 
@@ -56,7 +58,6 @@ class Particle {
     let directionY = forceDirectionY * force * this.density;
 
     if (distance < mouse.radius) {
-      this.size = 5;
       this.x -= directionX;
       this.y -= directionY;
     } else if (
@@ -78,10 +79,18 @@ class Particle {
 
 function initialise() {
   particleArray = [];
-  for (let i = 0; i < 300; i++) {
-    let x = Math.random() * canvas.width;
-    let y = Math.random() * canvas.height;
-    particleArray.push(new Particle(x, y));
+  let textHeight = textCoordinates.height;
+  let textWidth = textCoordinates.width;
+  for (let y = 0; y < textHeight; y++) {
+    for (let x = 0; x < textWidth; x++) {
+      if (
+        textCoordinates.data[y * 4 * textCoordinates.width + x * 4 + 3] > 128
+      ) {
+        let positionX = x + adjustX;
+        let positionY = y + adjustY;
+        particleArray.push(new Particle(positionX * 10, positionY * 10));
+      }
+    }
   }
 }
 
