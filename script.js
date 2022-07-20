@@ -120,7 +120,8 @@ function connect() {
       let distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance < 20) {
-        context.strokeStyle = 'green';
+        let opacityValue = 1 - distance / 20;
+        context.strokeStyle = 'rgba(38, 198, 218, ' + opacityValue + ')';
         context.lineWidth = 2;
         context.beginPath();
         context.moveTo(particleArray[p].x, particleArray[p].y);
