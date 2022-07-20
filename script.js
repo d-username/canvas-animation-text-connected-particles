@@ -104,9 +104,31 @@ function animate() {
     particleArray[i].draw();
     particleArray[i].update();
   }
+  connect();
   requestAnimationFrame(animate);
 }
 
 animate();
 
 // NOTES: animate() - is a loop which takes each particle in the array and draws them, becuase it is in a   requestAnimationFrame(animate) - it will keep re-drawing it again and again.
+
+function connect() {
+  for (let p = 0; p < particleArray.length; p++) {
+    for (let e = p; e < particleArray.length; e++) {
+      let dx = particleArray[p].x - particleArray[e].x;
+      let dy = particleArray[p].y - particleArray[e].y;
+      let distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 20) {
+        context.strokeStyle = 'green';
+        context.lineWidth = 2;
+        context.beginPath();
+        context.moveTo(particleArray[p].x, particleArray[p].y);
+        context.lineTo(particleArray[e].x, particleArray[e].y);
+        context.stroke();
+      }
+    }
+  }
+}
+
+// NOTES: connect() - this creates the "constellation effect - connects the partickles."
