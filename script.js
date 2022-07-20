@@ -35,7 +35,7 @@ class Particle {
     this.size = 3;
     this.baseX = this.x;
     this.baseY = this.y;
-    this.density = Math.random() * 30 + 1;
+    this.density = Math.random() * 5 + 1;
   }
   draw() {
     context.fillStyle = 'red';
@@ -48,19 +48,37 @@ class Particle {
     let dx = mouse.x - this.x;
     let dy = mouse.y - this.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < 100) {
-      this.size = 30;
-    } else {
+    let forceDirectionX = dx / distance;
+    let forceDirectionY = dy / distance;
+    let maxDistance = mouse.radius;
+    let force = (maxDistance - distance) / maxDistance;
+    let directionX = forceDirectionX * force * this.density;
+    let directionY = forceDirectionY * force * this.density;
+
+    if (distance < mouse.radius) {
+      this.size = 5;
+      this.x -= directionX;
+      this.y -= directionY;
+    } else if (
+      distance >= mouse.radius &&
+      (this.x !== this.baseX || this.y !== this.baseY)
+    ) {
       this.size = 3;
+      let dx = this.x - this.baseX;
+      this.x -= dx / 25;
+      let dy = this.y - this.baseY;
+      this.y -= dy / 25;
     }
   }
 }
 
 // NOTES: class Particle will be the blueprint to create each particle on the canvas.
+// NOTES: update() - checking the distance between the mouse and the particles - adds conditional styling to them.
+// NOTES: in the IFs, i tell the particles to move away from the mouse AND also move back to they base position when mouse is away.
 
 function initialise() {
   particleArray = [];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 300; i++) {
     let x = Math.random() * canvas.width;
     let y = Math.random() * canvas.height;
     particleArray.push(new Particle(x, y));
