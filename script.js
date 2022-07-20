@@ -44,6 +44,16 @@ class Particle {
     context.closePath();
     context.fill();
   }
+  update() {
+    let dx = mouse.x - this.x;
+    let dy = mouse.y - this.y;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < 100) {
+      this.size = 30;
+    } else {
+      this.size = 3;
+    }
+  }
 }
 
 // NOTES: class Particle will be the blueprint to create each particle on the canvas.
@@ -65,6 +75,7 @@ function animate() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   for (let i = 0; i < particleArray.length; i++) {
     particleArray[i].draw();
+    particleArray[i].update();
   }
   requestAnimationFrame(animate);
 }
